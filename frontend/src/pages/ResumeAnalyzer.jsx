@@ -53,7 +53,7 @@ const ResumeAnalyzer = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/resume/analyze",
+        "https://interview-ace-backend-ed6s.onrender.com/api/resume/analyze",
         formData,
         config
       );

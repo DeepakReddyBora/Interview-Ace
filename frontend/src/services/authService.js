@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "https://interview-ace-backend-ed6s.onrender.com/api/auth";
 
 
 // Register

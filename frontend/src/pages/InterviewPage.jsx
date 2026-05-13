@@ -125,7 +125,7 @@ const InterviewPage = () => {
         };
 
         const response = await axios.get(
-          `http://localhost:5000/api/interview/${id}`,
+          `https://interview-ace-backend-ed6s.onrender.com/api/interview/${id}`,
           config
         );
 
@@ -302,7 +302,7 @@ const InterviewPage = () => {
 
         const response =
           await axios.put(
-            `http://localhost:5000/api/interview/${id}/answer`,
+            `https://interview-ace-backend-ed6s.onrender.com/api/interview/${id}/answer`,
             {
               questionIndex:
                 currentQuestion,
@@ -363,7 +363,7 @@ const InterviewPage = () => {
 
         const response =
           await axios.put(
-            `http://localhost:5000/api/interview/${id}/evaluate`,
+            `https://interview-ace-backend-ed6s.onrender.com/api/interview/${id}/evaluate`,
             {
               questionIndex:
                 currentQuestion,

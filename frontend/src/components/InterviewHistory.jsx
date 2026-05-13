@@ -34,7 +34,7 @@ const InterviewHistory = () => {
         };
 
         const response = await axios.get(
-          "http://localhost:5000/api/interview",
+          "https://interview-ace-backend-ed6s.onrender.com/api/interview",
           config
         );
 

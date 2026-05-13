@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:5000/api/interview";
+  "https://interview-ace-backend-ed6s.onrender.com/api/interview";
 
 export const generateInterview = async (
   formData

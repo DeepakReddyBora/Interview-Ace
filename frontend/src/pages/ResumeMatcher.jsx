@@ -77,7 +77,7 @@ const ResumeMatcher = () => {
 
         const response =
           await axios.post(
-            "http://localhost:5000/api/resume/match",
+            "https://interview-ace-backend-ed6s.onrender.com/api/resume/match",
             formData,
             config
           );
