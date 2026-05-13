@@ -7,7 +7,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import InterviewSetup from "./pages/InterviewSetup.jsx";
 import InterviewPage from "./pages/InterviewPage.jsx";
 import ResumeMatcher from "./pages/ResumeMatcher.jsx";
-import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import ProtectedRoute from "./routes/protectedRoute.jsx";
 
 const App = () => {
 
