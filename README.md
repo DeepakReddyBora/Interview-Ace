@@ -220,18 +220,45 @@ Use:
 
 # 📸 Screenshots
 
-Add screenshots here after deployment.
+## 🔐 Login Page
 
-Example:
-
-* Login Page
-* Dashboard
-* Resume Analyzer
-* Resume Matcher
-* Analytics Dashboard
-* Profile Page
+![Login Page](./screenshots/login.png)
 
 ---
+
+## 🏠 Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+---
+
+## 🎤 AI Interview
+
+![AI Interview](./screenshots/interview.png)
+
+---
+
+## 📄 Resume Analyzer
+
+![Resume Analyzer](./screenshots/resume-analyzer.png)
+
+---
+
+## 🎯 Resume Matcher
+
+![Resume Matcher](./screenshots/resume-matcher.png)
+
+---
+
+## 📊 Analytics Dashboard
+
+![Analytics Dashboard](./screenshots/analytics.png)
+
+---
+
+## 👤 Profile Page
+
+![Profile Page](./screenshots/profile.png)
 
 # 🔥 Future Improvements
 
