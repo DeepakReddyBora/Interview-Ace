@@ -4,7 +4,7 @@ import {
   registerUser,
   loginUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
 } from "../controllers/authController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -12,14 +12,37 @@ import protect from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 
-// Public Routes
-router.post("/register", registerUser);
-router.post("/login", loginUser);
+// Register
+
+router.post(
+  "/register",
+  registerUser
+);
 
 
-// Protected Route
-router.get("/profile", protect, getUserProfile);
-router.put("/profile", protect, updateUserProfile);
+// Login
 
+router.post(
+  "/login",
+  loginUser
+);
+
+
+// Get Profile
+
+router.get(
+  "/profile",
+  protect,
+  getUserProfile
+);
+
+
+// Update Profile
+
+router.put(
+  "/profile",
+  protect,
+  updateUserProfile
+);
 
 export default router;
