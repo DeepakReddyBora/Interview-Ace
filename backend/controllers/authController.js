@@ -116,7 +116,7 @@ export const getUserProfile =
       const user =
         await User.findById(
           req.user._id
-        ).select("-password");
+        );
 
       if (!user) {
 
