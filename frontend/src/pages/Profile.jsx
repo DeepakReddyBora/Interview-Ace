@@ -27,15 +27,11 @@ const Profile = () => {
     useState("");
 
   const [avatar, setAvatar] =
-    useState(null);
-
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      email: "",
-      password: "",
-    });
-
+    useState(
+      localStorage.getItem(
+        "profileAvatar"
+      ) || ""
+    );
 
   const userInfo = JSON.parse(
     localStorage.getItem(
@@ -43,8 +39,17 @@ const Profile = () => {
     )
   );
 
+  const [formData, setFormData] =
+    useState({
+      name:
+        userInfo?.name || "",
+      email:
+        userInfo?.email || "",
+      password: "",
+    });
 
-  // Fetch Profile
+
+  // Fetch Latest Profile
   useEffect(() => {
 
     const fetchProfile =
@@ -67,9 +72,11 @@ const Profile = () => {
 
           setFormData({
             name:
-              response.data.name,
+              response.data.name ||
+              "",
             email:
-              response.data.email,
+              response.data.email ||
+              "",
             password: "",
           });
 
@@ -79,12 +86,15 @@ const Profile = () => {
         }
       };
 
-    fetchProfile();
+    if (userInfo?.token) {
 
-  }, [userInfo.token]);
+      fetchProfile();
+    }
+
+  }, [userInfo?.token]);
 
 
-  // Handle Input Change
+  // Handle Inputs
   const handleChange = (e) => {
 
     setFormData({
@@ -95,7 +105,7 @@ const Profile = () => {
   };
 
 
-  // Handle Avatar Upload
+  // Avatar Upload
   const handleAvatarChange = (
     e
   ) => {
@@ -105,12 +115,25 @@ const Profile = () => {
 
     if (file) {
 
-      const imageUrl =
-        URL.createObjectURL(
-          file
-        );
+      const reader =
+        new FileReader();
 
-      setAvatar(imageUrl);
+      reader.onloadend =
+        () => {
+
+          setAvatar(
+            reader.result
+          );
+
+          localStorage.setItem(
+            "profileAvatar",
+            reader.result
+          );
+        };
+
+      reader.readAsDataURL(
+        file
+      );
     }
   };
 
@@ -150,6 +173,11 @@ const Profile = () => {
           )
         );
 
+        setFormData({
+          ...formData,
+          password: "",
+        });
+
         setSuccess(
           "Profile updated successfully"
         );
@@ -178,12 +206,7 @@ const Profile = () => {
         : "bg-slate-100 text-slate-900"
     }`}>
 
-      {/* Navbar */}
-
       <Navbar />
-
-
-      {/* Main Content */}
 
       <div className="max-w-4xl mx-auto p-8">
 
@@ -193,11 +216,9 @@ const Profile = () => {
             : "bg-white border-slate-200"
         }`}>
 
-          {/* Header */}
+          {/* Avatar */}
 
           <div className="flex flex-col items-center mb-12">
-
-            {/* Avatar */}
 
             <div className="relative">
 
@@ -206,12 +227,12 @@ const Profile = () => {
                 <img
                   src={avatar}
                   alt="Avatar"
-                  className="w-36 h-36 rounded-full object-cover border-4 border-blue-500"
+                  className="w-40 h-40 rounded-full object-cover border-4 border-blue-500"
                 />
 
               ) : (
 
-                <div className="w-36 h-36 rounded-full bg-blue-600 flex items-center justify-center text-6xl font-bold text-white">
+                <div className="w-40 h-40 rounded-full bg-blue-600 flex items-center justify-center text-6xl font-bold text-white">
 
                   {formData.name
                     ?.charAt(0)
@@ -221,7 +242,7 @@ const Profile = () => {
               )}
 
 
-              {/* Upload Avatar */}
+              {/* Upload Button */}
 
               <label className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer text-white text-xl shadow-lg transition-all">
 
@@ -241,7 +262,7 @@ const Profile = () => {
             </div>
 
 
-            {/* User Info */}
+            {/* Name */}
 
             <h1 className="text-5xl font-bold mt-6 mb-2">
 
@@ -249,7 +270,10 @@ const Profile = () => {
 
             </h1>
 
-            <p className={`text-lg ${
+
+            {/* Email */}
+
+            <p className={`text-xl ${
               darkMode
                 ? "text-slate-400"
                 : "text-slate-600"
@@ -262,7 +286,7 @@ const Profile = () => {
           </div>
 
 
-          {/* Success Message */}
+          {/* Success */}
 
           {success && (
 
@@ -274,7 +298,7 @@ const Profile = () => {
           )}
 
 
-          {/* Error Message */}
+          {/* Error */}
 
           {error && (
 
@@ -291,8 +315,6 @@ const Profile = () => {
           {!editing ? (
 
             <div className="space-y-6">
-
-              {/* Name Card */}
 
               <div className={`p-6 rounded-2xl ${
                 darkMode
@@ -315,8 +337,6 @@ const Profile = () => {
               </div>
 
 
-              {/* Email Card */}
-
               <div className={`p-6 rounded-2xl ${
                 darkMode
                   ? "bg-slate-800"
@@ -337,31 +357,6 @@ const Profile = () => {
 
               </div>
 
-
-              {/* Status Card */}
-
-              <div className={`p-6 rounded-2xl ${
-                darkMode
-                  ? "bg-slate-800"
-                  : "bg-slate-100"
-              }`}>
-
-                <p className="text-sm text-slate-400 mb-2">
-
-                  Account Status
-
-                </p>
-
-                <h2 className="text-2xl font-semibold text-green-500">
-
-                  Active
-
-                </h2>
-
-              </div>
-
-
-              {/* Edit Button */}
 
               <button
                 onClick={() =>
@@ -387,8 +382,6 @@ const Profile = () => {
               className="space-y-6"
             >
 
-              {/* Name */}
-
               <input
                 type="text"
                 name="name"
@@ -405,8 +398,6 @@ const Profile = () => {
                 }`}
               />
 
-
-              {/* Email */}
 
               <input
                 type="email"
@@ -425,8 +416,6 @@ const Profile = () => {
               />
 
 
-              {/* Password */}
-
               <input
                 type="password"
                 name="password"
@@ -444,8 +433,6 @@ const Profile = () => {
                 }`}
               />
 
-
-              {/* Buttons */}
 
               <div className="flex gap-4">
 
