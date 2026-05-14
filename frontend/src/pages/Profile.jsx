@@ -64,7 +64,7 @@ const Profile = () => {
 
           const response =
             await axios.get(
-              `${import.meta.env.VITE_API_URL}/api/auth/profile`,
+              "https://interview-ace-backend-ed6s.onrender.com/api/auth/profile",
               config
             );
 
@@ -162,7 +162,7 @@ const Profile = () => {
 
         const response =
           await axios.put(
-            `${import.meta.env.VITE_API_URL}/api/auth/profile`,
+            "https://interview-ace-backend-ed6s.onrender.com/api/auth/profile",
             {
               name:
                 formData.name,
