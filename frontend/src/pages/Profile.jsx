@@ -26,8 +26,8 @@ const Profile = () => {
   const [error, setError] =
     useState("");
 
-  const [avatarColor, setAvatarColor] =
-    useState("bg-blue-600");
+  const [avatar, setAvatar] =
+    useState(null);
 
   const [formData, setFormData] =
     useState({
@@ -84,7 +84,7 @@ const Profile = () => {
   }, [userInfo.token]);
 
 
-  // Input Change
+  // Handle Input Change
   const handleChange = (e) => {
 
     setFormData({
@@ -92,6 +92,26 @@ const Profile = () => {
       [e.target.name]:
         e.target.value,
     });
+  };
+
+
+  // Handle Avatar Upload
+  const handleAvatarChange = (
+    e
+  ) => {
+
+    const file =
+      e.target.files[0];
+
+    if (file) {
+
+      const imageUrl =
+        URL.createObjectURL(
+          file
+        );
+
+      setAvatar(imageUrl);
+    }
   };
 
 
@@ -151,15 +171,6 @@ const Profile = () => {
     };
 
 
-  const avatarColors = [
-    "bg-blue-600",
-    "bg-purple-600",
-    "bg-pink-600",
-    "bg-green-600",
-    "bg-orange-600",
-  ];
-
-
   return (
     <div className={`min-h-screen transition-all duration-300 ${
       darkMode
@@ -167,7 +178,12 @@ const Profile = () => {
         : "bg-slate-100 text-slate-900"
     }`}>
 
+      {/* Navbar */}
+
       <Navbar />
+
+
+      {/* Main Content */}
 
       <div className="max-w-4xl mx-auto p-8">
 
@@ -179,47 +195,57 @@ const Profile = () => {
 
           {/* Header */}
 
-          <div className="flex flex-col items-center mb-10">
+          <div className="flex flex-col items-center mb-12">
 
             {/* Avatar */}
 
-            <div className={`w-32 h-32 rounded-full flex items-center justify-center text-5xl font-bold text-white mb-5 ${avatarColor}`}>
+            <div className="relative">
 
-              {formData.name
-                ?.charAt(0)
-                ?.toUpperCase()}
+              {avatar ? (
 
-            </div>
+                <img
+                  src={avatar}
+                  alt="Avatar"
+                  className="w-36 h-36 rounded-full object-cover border-4 border-blue-500"
+                />
 
+              ) : (
 
-            {/* Avatar Colors */}
+                <div className="w-36 h-36 rounded-full bg-blue-600 flex items-center justify-center text-6xl font-bold text-white">
 
-            <div className="flex gap-3 mb-6">
+                  {formData.name
+                    ?.charAt(0)
+                    ?.toUpperCase()}
 
-              {avatarColors.map(
-                (
-                  color,
-                  index
-                ) => (
-
-                  <button
-                    key={index}
-                    onClick={() =>
-                      setAvatarColor(
-                        color
-                      )
-                    }
-                    className={`w-8 h-8 rounded-full ${color} border-2 border-white`}
-                  />
-                )
+                </div>
               )}
 
+
+              {/* Upload Avatar */}
+
+              <label className="absolute bottom-2 right-2 bg-blue-600 hover:bg-blue-700 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer text-white text-xl shadow-lg transition-all">
+
+                +
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={
+                    handleAvatarChange
+                  }
+                />
+
+              </label>
+
             </div>
 
 
-            <h1 className="text-5xl font-bold mb-2">
+            {/* User Info */}
 
-              My Profile
+            <h1 className="text-5xl font-bold mt-6 mb-2">
+
+              {formData.name}
 
             </h1>
 
@@ -229,14 +255,14 @@ const Profile = () => {
                 : "text-slate-600"
             }`}>
 
-              Manage your account settings
+              {formData.email}
 
             </p>
 
           </div>
 
 
-          {/* Success */}
+          {/* Success Message */}
 
           {success && (
 
@@ -248,7 +274,7 @@ const Profile = () => {
           )}
 
 
-          {/* Error */}
+          {/* Error Message */}
 
           {error && (
 
@@ -266,15 +292,17 @@ const Profile = () => {
 
             <div className="space-y-6">
 
-              <div className={`p-5 rounded-2xl ${
+              {/* Name Card */}
+
+              <div className={`p-6 rounded-2xl ${
                 darkMode
                   ? "bg-slate-800"
                   : "bg-slate-100"
               }`}>
 
-                <p className="text-sm mb-2 text-slate-400">
+                <p className="text-sm text-slate-400 mb-2">
 
-                  Name
+                  Full Name
 
                 </p>
 
@@ -287,15 +315,17 @@ const Profile = () => {
               </div>
 
 
-              <div className={`p-5 rounded-2xl ${
+              {/* Email Card */}
+
+              <div className={`p-6 rounded-2xl ${
                 darkMode
                   ? "bg-slate-800"
                   : "bg-slate-100"
               }`}>
 
-                <p className="text-sm mb-2 text-slate-400">
+                <p className="text-sm text-slate-400 mb-2">
 
-                  Email
+                  Email Address
 
                 </p>
 
@@ -307,6 +337,31 @@ const Profile = () => {
 
               </div>
 
+
+              {/* Status Card */}
+
+              <div className={`p-6 rounded-2xl ${
+                darkMode
+                  ? "bg-slate-800"
+                  : "bg-slate-100"
+              }`}>
+
+                <p className="text-sm text-slate-400 mb-2">
+
+                  Account Status
+
+                </p>
+
+                <h2 className="text-2xl font-semibold text-green-500">
+
+                  Active
+
+                </h2>
+
+              </div>
+
+
+              {/* Edit Button */}
 
               <button
                 onClick={() =>
@@ -332,10 +387,11 @@ const Profile = () => {
               className="space-y-6"
             >
 
+              {/* Name */}
+
               <input
                 type="text"
                 name="name"
-                placeholder="Name"
                 value={
                   formData.name
                 }
@@ -350,10 +406,11 @@ const Profile = () => {
               />
 
 
+              {/* Email */}
+
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
                 value={
                   formData.email
                 }
@@ -367,6 +424,8 @@ const Profile = () => {
                 }`}
               />
 
+
+              {/* Password */}
 
               <input
                 type="password"
@@ -386,6 +445,8 @@ const Profile = () => {
               />
 
 
+              {/* Buttons */}
+
               <div className="flex gap-4">
 
                 <button
@@ -395,7 +456,7 @@ const Profile = () => {
                 >
 
                   {loading
-                    ? "Updating..."
+                    ? "Saving..."
                     : "Save Changes"}
 
                 </button>
@@ -404,9 +465,7 @@ const Profile = () => {
                 <button
                   type="button"
                   onClick={() =>
-                    setEditing(
-                      false
-                    )
+                    setEditing(false)
                   }
                   className="flex-1 bg-slate-600 hover:bg-slate-700 text-white p-4 rounded-xl font-semibold transition-all"
                 >
