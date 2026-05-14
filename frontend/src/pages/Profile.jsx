@@ -17,11 +17,17 @@ const Profile = () => {
   const [loading, setLoading] =
     useState(false);
 
+  const [editing, setEditing] =
+    useState(false);
+
   const [success, setSuccess] =
     useState("");
 
   const [error, setError] =
     useState("");
+
+  const [avatarColor, setAvatarColor] =
+    useState("bg-blue-600");
 
   const [formData, setFormData] =
     useState({
@@ -89,7 +95,7 @@ const Profile = () => {
   };
 
 
-  // Submit
+  // Update Profile
   const handleSubmit =
     async (e) => {
 
@@ -128,6 +134,8 @@ const Profile = () => {
           "Profile updated successfully"
         );
 
+        setEditing(false);
+
       } catch (error) {
 
         setError(
@@ -143,6 +151,15 @@ const Profile = () => {
     };
 
 
+  const avatarColors = [
+    "bg-blue-600",
+    "bg-purple-600",
+    "bg-pink-600",
+    "bg-green-600",
+    "bg-orange-600",
+  ];
+
+
   return (
     <div className={`min-h-screen transition-all duration-300 ${
       darkMode
@@ -152,9 +169,9 @@ const Profile = () => {
 
       <Navbar />
 
-      <div className="max-w-3xl mx-auto p-8">
+      <div className="max-w-4xl mx-auto p-8">
 
-        <div className={`rounded-3xl p-10 border ${
+        <div className={`rounded-3xl p-10 border shadow-xl ${
           darkMode
             ? "bg-slate-900 border-slate-800"
             : "bg-white border-slate-200"
@@ -162,9 +179,11 @@ const Profile = () => {
 
           {/* Header */}
 
-          <div className="text-center mb-10">
+          <div className="flex flex-col items-center mb-10">
 
-            <div className="w-28 h-28 rounded-full bg-blue-600 flex items-center justify-center text-4xl font-bold mx-auto mb-5">
+            {/* Avatar */}
+
+            <div className={`w-32 h-32 rounded-full flex items-center justify-center text-5xl font-bold text-white mb-5 ${avatarColor}`}>
 
               {formData.name
                 ?.charAt(0)
@@ -172,11 +191,47 @@ const Profile = () => {
 
             </div>
 
-            <h1 className="text-4xl font-bold">
+
+            {/* Avatar Colors */}
+
+            <div className="flex gap-3 mb-6">
+
+              {avatarColors.map(
+                (
+                  color,
+                  index
+                ) => (
+
+                  <button
+                    key={index}
+                    onClick={() =>
+                      setAvatarColor(
+                        color
+                      )
+                    }
+                    className={`w-8 h-8 rounded-full ${color} border-2 border-white`}
+                  />
+                )
+              )}
+
+            </div>
+
+
+            <h1 className="text-5xl font-bold mb-2">
 
               My Profile
 
             </h1>
+
+            <p className={`text-lg ${
+              darkMode
+                ? "text-slate-400"
+                : "text-slate-600"
+            }`}>
+
+              Manage your account settings
+
+            </p>
 
           </div>
 
@@ -205,82 +260,165 @@ const Profile = () => {
           )}
 
 
-          {/* Form */}
+          {/* VIEW MODE */}
 
-          <form
-            onSubmit={
-              handleSubmit
-            }
-            className="space-y-6"
-          >
+          {!editing ? (
 
-            <input
-              type="text"
-              name="name"
-              placeholder="Name"
-              value={
-                formData.name
-              }
-              onChange={
-                handleChange
-              }
-              className={`w-full p-4 rounded-xl border outline-none ${
+            <div className="space-y-6">
+
+              <div className={`p-5 rounded-2xl ${
                 darkMode
-                  ? "bg-slate-800 border-slate-700"
-                  : "bg-slate-100 border-slate-300"
-              }`}
-            />
+                  ? "bg-slate-800"
+                  : "bg-slate-100"
+              }`}>
+
+                <p className="text-sm mb-2 text-slate-400">
+
+                  Name
+
+                </p>
+
+                <h2 className="text-2xl font-semibold">
+
+                  {formData.name}
+
+                </h2>
+
+              </div>
 
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={
-                formData.email
-              }
-              onChange={
-                handleChange
-              }
-              className={`w-full p-4 rounded-xl border outline-none ${
+              <div className={`p-5 rounded-2xl ${
                 darkMode
-                  ? "bg-slate-800 border-slate-700"
-                  : "bg-slate-100 border-slate-300"
-              }`}
-            />
+                  ? "bg-slate-800"
+                  : "bg-slate-100"
+              }`}>
+
+                <p className="text-sm mb-2 text-slate-400">
+
+                  Email
+
+                </p>
+
+                <h2 className="text-2xl font-semibold">
+
+                  {formData.email}
+
+                </h2>
+
+              </div>
 
 
-            <input
-              type="password"
-              name="password"
-              placeholder="New Password"
-              value={
-                formData.password
+              <button
+                onClick={() =>
+                  setEditing(true)
+                }
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-semibold transition-all"
+              >
+
+                Edit Profile
+
+              </button>
+
+            </div>
+
+          ) : (
+
+            /* EDIT MODE */
+
+            <form
+              onSubmit={
+                handleSubmit
               }
-              onChange={
-                handleChange
-              }
-              className={`w-full p-4 rounded-xl border outline-none ${
-                darkMode
-                  ? "bg-slate-800 border-slate-700"
-                  : "bg-slate-100 border-slate-300"
-              }`}
-            />
-
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white p-4 rounded-xl font-semibold transition-all"
+              className="space-y-6"
             >
 
-              {loading
-                ? "Updating..."
-                : "Update Profile"}
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={
+                  formData.name
+                }
+                onChange={
+                  handleChange
+                }
+                className={`w-full p-4 rounded-xl border outline-none ${
+                  darkMode
+                    ? "bg-slate-800 border-slate-700"
+                    : "bg-slate-100 border-slate-300"
+                }`}
+              />
 
-            </button>
 
-          </form>
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={
+                  formData.email
+                }
+                onChange={
+                  handleChange
+                }
+                className={`w-full p-4 rounded-xl border outline-none ${
+                  darkMode
+                    ? "bg-slate-800 border-slate-700"
+                    : "bg-slate-100 border-slate-300"
+                }`}
+              />
+
+
+              <input
+                type="password"
+                name="password"
+                placeholder="New Password"
+                value={
+                  formData.password
+                }
+                onChange={
+                  handleChange
+                }
+                className={`w-full p-4 rounded-xl border outline-none ${
+                  darkMode
+                    ? "bg-slate-800 border-slate-700"
+                    : "bg-slate-100 border-slate-300"
+                }`}
+              />
+
+
+              <div className="flex gap-4">
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white p-4 rounded-xl font-semibold transition-all"
+                >
+
+                  {loading
+                    ? "Updating..."
+                    : "Save Changes"}
+
+                </button>
+
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setEditing(
+                      false
+                    )
+                  }
+                  className="flex-1 bg-slate-600 hover:bg-slate-700 text-white p-4 rounded-xl font-semibold transition-all"
+                >
+
+                  Cancel
+
+                </button>
+
+              </div>
+
+            </form>
+          )}
 
         </div>
 
