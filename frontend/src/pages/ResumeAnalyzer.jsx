@@ -8,72 +8,93 @@ import useTheme from "../context/useTheme.js";
 
 const ResumeAnalyzer = () => {
 
-  const { darkMode } = useTheme();
+  const { darkMode } =
+    useTheme();
 
-  const [resume, setResume] = useState(null);
+  const [resume, setResume] =
+    useState(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] =
+    useState("");
 
-  const [error, setError] = useState("");
+  const [error, setError] =
+    useState("");
 
 
-  const handleSubmit = async (e) => {
+  // Submit
+  const handleSubmit =
+    async (e) => {
 
-    e.preventDefault();
+      e.preventDefault();
 
-    if (!resume) {
+      if (!resume) {
 
-      return setError(
-        "Please upload a resume"
-      );
-    }
+        return setError(
+          "Please upload a resume"
+        );
+      }
 
-    try {
+      try {
 
-      setLoading(true);
+        setLoading(true);
 
-      setError("");
+        setError("");
 
-      const formData = new FormData();
+        setFeedback("");
 
-      formData.append("resume", resume);
+        const formData =
+          new FormData();
 
-      const userInfo = JSON.parse(
-        localStorage.getItem("userInfo")
-      );
+        formData.append(
+          "resume",
+          resume
+        );
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-          "Content-Type":
-            "multipart/form-data",
-        },
-      };
+        const userInfo =
+          JSON.parse(
+            localStorage.getItem(
+              "userInfo"
+            )
+          );
 
-      const response = await axios.post(
-        "https://interview-ace-backend-ed6s.onrender.com/api/resume/analyze",
-        formData,
-        config
-      );
+        const config = {
+          headers: {
+            Authorization:
+              `Bearer ${userInfo.token}`,
+            "Content-Type":
+              "multipart/form-data",
+          },
+        };
 
-      setFeedback(response.data.feedback);
+        const response =
+          await axios.post(
+            "https://interview-ace-backend-ed6s.onrender.com/api/resume/analyze",
+            formData,
+            config
+          );
 
-    } catch (error) {
+        setFeedback(
+          response.data.feedback
+        );
 
-      console.log(error);
+      } catch (error) {
 
-      setError(
-        error.response?.data?.message ||
-        "Resume analysis failed"
-      );
+        console.log(error);
 
-    } finally {
+        setError(
+          error.response?.data
+            ?.message ||
+          "Resume analysis failed"
+        );
 
-      setLoading(false);
-    }
-  };
+      } finally {
+
+        setLoading(false);
+      }
+    };
 
 
   return (
@@ -83,26 +104,37 @@ const ResumeAnalyzer = () => {
         : "bg-slate-100 text-slate-900"
     }`}>
 
+      {/* Navbar */}
+
       <Navbar />
 
 
-      <div className="max-w-5xl mx-auto p-8">
+      {/* Main Container */}
+
+      <div className="max-w-6xl mx-auto p-8">
 
         {/* Header */}
 
-        <div className="mb-10">
+        <div className="mb-12">
 
           <h1 className="text-5xl font-bold mb-4">
+
             AI Resume Analyzer
+
           </h1>
 
-          <p className={`text-lg ${
+          <p className={`text-lg max-w-3xl ${
             darkMode
               ? "text-slate-400"
               : "text-slate-600"
           }`}>
+
             Upload your resume and receive
-            ATS-style AI feedback instantly.
+            ATS-style AI feedback,
+            missing skills analysis,
+            resume improvements, and
+            interview readiness insights.
+
           </p>
 
         </div>
@@ -110,50 +142,125 @@ const ResumeAnalyzer = () => {
 
         {/* Upload Card */}
 
-        <div className={`p-10 rounded-3xl border mb-10 ${
+        <div className={`rounded-3xl p-10 border mb-10 transition-all ${
           darkMode
             ? "bg-slate-900 border-slate-800"
             : "bg-white border-slate-200"
         }`}>
 
           <form
-            onSubmit={handleSubmit}
-            className="space-y-6"
+            onSubmit={
+              handleSubmit
+            }
+            className="space-y-8"
           >
 
-            <div>
+            {/* Upload Box */}
 
-              <label className="block mb-3 text-lg font-medium">
-                Upload Resume (PDF)
-              </label>
+            <div
+              className={`border-2 border-dashed rounded-3xl p-10 text-center transition-all ${
+                darkMode
+                  ? "border-slate-700 bg-slate-800/50"
+                  : "border-slate-300 bg-slate-50"
+              }`}
+            >
+
+              <div className="text-6xl mb-5">
+
+                📄
+
+              </div>
+
+              <h2 className="text-2xl font-semibold mb-3">
+
+                Upload Your Resume
+
+              </h2>
+
+              <p className={`mb-6 ${
+                darkMode
+                  ? "text-slate-400"
+                  : "text-slate-600"
+              }`}>
+
+                Upload a PDF resume and
+                receive AI-powered ATS
+                analysis instantly.
+
+              </p>
+
+
+              {/* File Input */}
 
               <input
                 type="file"
                 accept=".pdf"
+                id="resumeUpload"
+                className="hidden"
                 onChange={(e) =>
-                  setResume(e.target.files[0])
+                  setResume(
+                    e.target.files[0]
+                  )
                 }
-                className={`w-full p-4 rounded-2xl border cursor-pointer ${
-                  darkMode
-                    ? "bg-slate-800 border-slate-700"
-                    : "bg-slate-100 border-slate-300"
-                }`}
               />
+
+
+              <label
+                htmlFor="resumeUpload"
+                className="inline-block bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-2xl text-white font-semibold cursor-pointer transition-all"
+              >
+
+                Choose Resume
+
+              </label>
+
+
+              {/* File Name */}
+
+              {resume && (
+
+                <div className={`mt-6 p-4 rounded-2xl ${
+                  darkMode
+                    ? "bg-slate-800"
+                    : "bg-slate-100"
+                }`}>
+
+                  <p className="font-medium">
+
+                    Selected File:
+
+                  </p>
+
+                  <p className="mt-1 text-blue-500 break-all">
+
+                    {resume.name}
+
+                  </p>
+
+                </div>
+              )}
 
             </div>
 
 
+            {/* Error */}
+
             {error && (
-              <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-xl">
+
+              <div className="bg-red-500/20 border border-red-500 text-red-400 p-4 rounded-2xl">
+
                 {error}
+
               </div>
             )}
 
 
+            {/* Submit Button */}
+
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-2xl text-lg font-semibold transition-all text-white disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed p-5 rounded-2xl text-xl font-semibold text-white transition-all"
             >
 
               {loading
@@ -167,25 +274,63 @@ const ResumeAnalyzer = () => {
         </div>
 
 
-        {/* Feedback */}
+        {/* Feedback Section */}
 
         {feedback && (
 
-          <div className={`p-10 rounded-3xl border ${
+          <div className={`rounded-3xl p-10 border transition-all ${
             darkMode
               ? "bg-slate-900 border-slate-800"
               : "bg-white border-slate-200"
           }`}>
 
-            <h2 className="text-3xl font-bold mb-6">
-              AI Resume Feedback
-            </h2>
+            <div className="flex items-center gap-4 mb-8">
 
-            <pre className="whitespace-pre-wrap font-sans leading-relaxed text-lg">
+              <div className="text-5xl">
 
-              {feedback}
+                🤖
 
-            </pre>
+              </div>
+
+              <div>
+
+                <h2 className="text-4xl font-bold">
+
+                  AI Resume Feedback
+
+                </h2>
+
+                <p className={`mt-2 ${
+                  darkMode
+                    ? "text-slate-400"
+                    : "text-slate-600"
+                }`}>
+
+                  ATS analysis and
+                  improvement suggestions
+
+                </p>
+
+              </div>
+
+            </div>
+
+
+            {/* Feedback Content */}
+
+            <div className={`rounded-3xl p-8 overflow-x-auto ${
+              darkMode
+                ? "bg-slate-800"
+                : "bg-slate-100"
+            }`}>
+
+              <pre className="whitespace-pre-wrap font-sans leading-relaxed text-lg">
+
+                {feedback}
+
+              </pre>
+
+            </div>
 
           </div>
         )}
