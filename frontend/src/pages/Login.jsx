@@ -1,61 +1,110 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 
-import { loginUser } from "../services/authService.js";
+import {
+  useNavigate,
+  Link,
+} from "react-router-dom";
+
+import {
+  loginUser,
+} from "../services/authService.js";
 
 import useTheme from "../context/useTheme.js";
 
 const Login = () => {
 
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const { darkMode, toggleTheme } = useTheme();
+  const {
+    darkMode,
+    toggleTheme,
+  } = useTheme();
 
-  const [formData, setFormData] = useState({
+  const [
+    formData,
+    setFormData,
+  ] = useState({
     email: "",
     password: "",
   });
 
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const [
+    success,
+    setSuccess,
+  ] = useState("");
+
+  const [
+    error,
+    setError,
+  ] = useState("");
+
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
 
+  // Handle Input Change
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
   };
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Submit Form
+  const handleSubmit =
+    async (e) => {
 
-    setError("");
-    setSuccess("");
+      e.preventDefault();
 
-    try {
+      setError("");
 
-      const data = await loginUser(formData);
+      setSuccess("");
 
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify(data)
-      );
+      setLoading(true);
 
-      setSuccess("Login successful!");
+      try {
 
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+        const data =
+          await loginUser(
+            formData
+          );
 
-    } catch (error) {
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify(data)
+        );
 
-      setError(
-        error.response?.data?.message || "Something went wrong"
-      );
-    }
-  };
+        setSuccess(
+          "Login successful!"
+        );
+
+        setTimeout(() => {
+
+          navigate(
+            "/dashboard"
+          );
+
+        }, 1000);
+
+      } catch (error) {
+
+        setError(
+          error.response?.data
+            ?.message ||
+          "Something went wrong"
+        );
+
+      } finally {
+
+        setLoading(false);
+      }
+    };
 
 
   return (
@@ -75,7 +124,11 @@ const Login = () => {
             : "bg-white hover:bg-slate-200"
         }`}
       >
-        {darkMode ? "Light" : "Dark"}
+
+        {darkMode
+          ? "Light"
+          : "Dark"}
+
       </button>
 
 
@@ -88,7 +141,9 @@ const Login = () => {
       }`}>
 
         <h1 className="text-4xl font-bold text-center mb-2">
+
           Interview Ace
+
         </h1>
 
         <p className={`text-center mb-8 ${
@@ -96,15 +151,21 @@ const Login = () => {
             ? "text-slate-400"
             : "text-slate-600"
         }`}>
-          AI Powered Interview Preparation
+
+          AI Powered Interview
+          Preparation
+
         </p>
 
 
         {/* Success Message */}
 
         {success && (
+
           <div className="bg-green-500/20 border border-green-500 text-green-400 p-3 rounded-xl mb-4">
+
             {success}
+
           </div>
         )}
 
@@ -112,8 +173,11 @@ const Login = () => {
         {/* Error Message */}
 
         {error && (
+
           <div className="bg-red-500/20 border border-red-500 text-red-400 p-3 rounded-xl mb-4">
+
             {error}
+
           </div>
         )}
 
@@ -121,41 +185,66 @@ const Login = () => {
         {/* Form */}
 
         <form
-          onSubmit={handleSubmit}
+          onSubmit={
+            handleSubmit
+          }
           className="space-y-5"
         >
+
+          {/* Email */}
 
           <input
             type="email"
             name="email"
             placeholder="Enter Email"
-            value={formData.email}
-            onChange={handleChange}
+            value={
+              formData.email
+            }
+            onChange={
+              handleChange
+            }
             className={`w-full p-4 rounded-xl border outline-none transition-all ${
               darkMode
                 ? "bg-slate-800 border-slate-700 text-white placeholder-slate-400 focus:border-blue-500"
                 : "bg-slate-100 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-500"
             }`}
+            required
           />
+
+
+          {/* Password */}
 
           <input
             type="password"
             name="password"
             placeholder="Enter Password"
-            value={formData.password}
-            onChange={handleChange}
+            value={
+              formData.password
+            }
+            onChange={
+              handleChange
+            }
             className={`w-full p-4 rounded-xl border outline-none transition-all ${
               darkMode
                 ? "bg-slate-800 border-slate-700 text-white placeholder-slate-400 focus:border-blue-500"
                 : "bg-slate-100 border-slate-300 text-slate-900 placeholder-slate-500 focus:border-blue-500"
             }`}
+            required
           />
+
+
+          {/* Login Button */}
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition-all p-4 rounded-xl font-semibold text-white"
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all p-4 rounded-xl font-semibold text-white"
           >
-            Login
+
+            {loading
+              ? "Logging in..."
+              : "Login"}
+
           </button>
 
         </form>
@@ -169,13 +258,16 @@ const Login = () => {
             : "text-slate-600"
         }`}>
 
-          Don’t have an account?
+          Don’t have an
+          account?
 
           <Link
             to="/register"
             className="text-blue-500 ml-2 font-medium"
           >
+
             Register
+
           </Link>
 
         </p>
