@@ -108,38 +108,42 @@ export const loginUser = async (
 
 // ================= GET USER PROFILE =================
 
-export const getUserProfile = async (
-  req,
-  res
-) => {
+export const getUserProfile =
+  async (req, res) => {
 
-  try {
+    try {
 
-    const user = await User.findById(
-      req.user._id
-    ).select("-password");
+      const user =
+        await User.findById(
+          req.user._id
+        ).select("-password");
 
-    if (!user) {
+      if (!user) {
 
-      return res.status(404).json({
-        message: "User not found",
+        return res.status(404).json({
+          message:
+            "User not found",
+        });
+      }
+
+      res.status(200).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+      });
+
+    } catch (error) {
+
+      console.log(error);
+
+      res.status(500).json({
+        message:
+          "Server Error",
       });
     }
-
-    res.status(200).json(user);
-
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      message: "Server Error",
-    });
-  }
-};
+  };
 
 // ================= UPDATE USER PROFILE =================
-
 export const updateUserProfile =
   async (req, res) => {
 
@@ -153,17 +157,23 @@ export const updateUserProfile =
       if (!user) {
 
         return res.status(404).json({
-          message: "User not found",
+          message:
+            "User not found",
         });
       }
 
       user.name =
-        req.body.name || user.name;
+        req.body.name ||
+        user.name;
 
       user.email =
-        req.body.email || user.email;
+        req.body.email ||
+        user.email;
 
-      if (req.body.password) {
+      if (
+        req.body.password &&
+        req.body.password.trim() !== ""
+      ) {
 
         user.password =
           req.body.password;
@@ -173,12 +183,19 @@ export const updateUserProfile =
         await user.save();
 
       res.status(200).json({
-        _id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        token: generateToken(
-          updatedUser._id
-        ),
+        _id:
+          updatedUser._id,
+
+        name:
+          updatedUser.name,
+
+        email:
+          updatedUser.email,
+
+        token:
+          generateToken(
+            updatedUser._id
+          ),
       });
 
     } catch (error) {
@@ -186,7 +203,8 @@ export const updateUserProfile =
       console.log(error);
 
       res.status(500).json({
-        message: "Server Error",
+        message:
+          "Profile update failed",
       });
     }
   };
