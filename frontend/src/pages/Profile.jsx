@@ -68,11 +68,6 @@ const Profile = () => {
               config
             );
 
-          console.log(
-            "PROFILE RESPONSE:",
-            response.data
-          );
-
           setFormData({
             name:
               response.data?.name ||
@@ -168,7 +163,19 @@ const Profile = () => {
         const response =
           await axios.put(
             `${import.meta.env.VITE_API_URL}/api/auth/profile`,
-            formData,
+            {
+              name:
+                formData.name,
+
+              email:
+                formData.email,
+
+              ...(formData.password
+                .trim() && {
+                password:
+                  formData.password,
+              }),
+            },
             config
           );
 
@@ -179,10 +186,10 @@ const Profile = () => {
           )
         );
 
-        setFormData({
-          ...formData,
+        setFormData((prev) => ({
+          ...prev,
           password: "",
-        });
+        }));
 
         setSuccess(
           "Profile updated successfully"
@@ -301,7 +308,7 @@ const Profile = () => {
           </div>
 
 
-          {/* Success */}
+          {/* Success Message */}
 
           {success && (
 
@@ -313,7 +320,7 @@ const Profile = () => {
           )}
 
 
-          {/* Error */}
+          {/* Error Message */}
 
           {error && (
 
@@ -416,6 +423,7 @@ const Profile = () => {
                 onChange={
                   handleChange
                 }
+                required
                 className={`w-full p-4 rounded-xl border outline-none ${
                   darkMode
                     ? "bg-slate-800 border-slate-700"
@@ -435,6 +443,7 @@ const Profile = () => {
                 onChange={
                   handleChange
                 }
+                required
                 className={`w-full p-4 rounded-xl border outline-none ${
                   darkMode
                     ? "bg-slate-800 border-slate-700"
