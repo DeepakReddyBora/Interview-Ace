@@ -1,152 +1,140 @@
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
   PieChart,
   Pie,
   Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
 } from "recharts";
 
 import useTheme from "../context/useTheme.js";
 
-const Analytics = ({ interviews }) => {
+const Analytics = ({
+  interviews,
+}) => {
 
-  const { darkMode } = useTheme();
+  const { darkMode } =
+    useTheme();
 
-  // Extract Scores
-  const scoreData = interviews.map(
-    (interview, index) => {
-
-      const scores =
-        interview.questions
-          ?.filter((q) => q.score)
-          ?.map((q) => q.score);
-
-      const average =
-        scores.length > 0
-          ? (
-              scores.reduce(
-                (a, b) => a + b,
-                0
-              ) / scores.length
-            ).toFixed(1)
-          : 0;
-
-      return {
-        name: `Interview ${
-          index + 1
-        }`,
-        score: Number(average),
-      };
-    }
-  );
-
-  // Overall Stats
+  // Total Interviews
   const totalInterviews =
     interviews.length;
 
-  const allScores = interviews.flatMap(
-    (interview) =>
-      interview.questions
-        ?.filter((q) => q.score)
-        ?.map((q) => q.score) || []
-  );
-
+  // Average Score
   const averageScore =
-    allScores.length > 0
-      ? (
-          allScores.reduce(
-            (a, b) => a + b,
+    totalInterviews > 0
+      ? Math.round(
+          interviews.reduce(
+            (acc, interview) =>
+              acc +
+              (interview.score ||
+                0),
             0
-          ) / allScores.length
-        ).toFixed(1)
+          ) / totalInterviews
+        )
       : 0;
 
-  // Pie Chart Data
+  // Pie Data
   const pieData = [
     {
-      name: "Strong",
-      value: allScores.filter(
-        (s) => s >= 7
-      ).length,
+      name: "Completed",
+      value: totalInterviews,
     },
     {
-      name: "Needs Improvement",
-      value: allScores.filter(
-        (s) => s < 7
-      ).length,
+      name: "Remaining",
+      value:
+        Math.max(
+          10 -
+            totalInterviews,
+          0
+        ),
     },
   ];
 
+  // Bar Data
+  const barData =
+    interviews.map(
+      (
+        interview,
+        index
+      ) => ({
+        name: `Interview ${
+          index + 1
+        }`,
+        score:
+          interview.score || 0,
+      })
+    );
+
   const COLORS = [
-    "#22c55e",
-    "#ef4444",
+    "#3B82F6",
+    "#8B5CF6",
   ];
+
 
   return (
     <div className="mt-14">
 
-      {/* Heading */}
+      <h2 className="text-4xl font-bold mb-8">
 
-      <h2 className="text-3xl font-bold mb-8">
-        Interview Analytics
+        Analytics Dashboard
+
       </h2>
 
 
       {/* Stats Cards */}
 
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
+      <div className="grid md:grid-cols-2 gap-6 mb-10">
 
-        <div className={`p-6 rounded-3xl border ${
-          darkMode
-            ? "bg-slate-900 border-slate-800"
-            : "bg-white border-slate-200"
-        }`}>
+        {/* Total Interviews */}
 
-          <h3 className="text-lg mb-2">
+        <div
+          className={`rounded-3xl p-8 border ${
+            darkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-slate-200"
+          }`}
+        >
+
+          <h3 className="text-xl font-semibold mb-3">
+
             Total Interviews
+
           </h3>
 
-          <p className="text-4xl font-bold">
+          <p className="text-5xl font-bold text-blue-500">
+
             {totalInterviews}
+
           </p>
 
         </div>
 
 
-        <div className={`p-6 rounded-3xl border ${
-          darkMode
-            ? "bg-slate-900 border-slate-800"
-            : "bg-white border-slate-200"
-        }`}>
+        {/* Average Score */}
 
-          <h3 className="text-lg mb-2">
+        <div
+          className={`rounded-3xl p-8 border ${
+            darkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-slate-200"
+          }`}
+        >
+
+          <h3 className="text-xl font-semibold mb-3">
+
             Average Score
+
           </h3>
 
-          <p className="text-4xl font-bold">
-            {averageScore}/10
-          </p>
+          <p className="text-5xl font-bold text-purple-500">
 
-        </div>
+            {averageScore}%
 
-
-        <div className={`p-6 rounded-3xl border ${
-          darkMode
-            ? "bg-slate-900 border-slate-800"
-            : "bg-white border-slate-200"
-        }`}>
-
-          <h3 className="text-lg mb-2">
-            Questions Evaluated
-          </h3>
-
-          <p className="text-4xl font-bold">
-            {allScores.length}
           </p>
 
         </div>
@@ -158,94 +146,132 @@ const Analytics = ({ interviews }) => {
 
       <div className="grid lg:grid-cols-2 gap-8">
 
-        {/* Line Chart */}
+        {/* Pie Chart */}
 
-        <div className={`p-6 rounded-3xl border h-100 ${
-          darkMode
-            ? "bg-slate-900 border-slate-800"
-            : "bg-white border-slate-200"
-        }`}>
+        <div
+          className={`rounded-3xl p-8 border ${
+            darkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-slate-200"
+          }`}
+        >
 
           <h3 className="text-2xl font-semibold mb-6">
-            Progress Over Time
+
+            Interview Progress
+
           </h3>
 
-          <ResponsiveContainer
-            width="100%"
-            height="85%"
-          >
 
-            <LineChart data={scoreData}>
+          {/* FIXED CONTAINER */}
 
-              <CartesianGrid
-                strokeDasharray="3 3"
-              />
+          <div className="w-full h-75h-[300px]">
 
-              <XAxis dataKey="name" />
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
 
-              <YAxis domain={[0, 10]} />
+              <PieChart>
 
-              <Tooltip />
+                <Pie
+                  data={pieData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={100}
+                  label
+                >
 
-              <Line
-                type="monotone"
-                dataKey="score"
-                stroke="#3b82f6"
-                strokeWidth={3}
-              />
+                  {pieData.map(
+                    (
+                      entry,
+                      index
+                    ) => (
 
-            </LineChart>
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={
+                          COLORS[
+                            index %
+                              COLORS.length
+                          ]
+                        }
+                        stroke="none"
+                      />
+                    )
+                  )}
 
-          </ResponsiveContainer>
+                </Pie>
+
+                <Tooltip />
+
+              </PieChart>
+
+            </ResponsiveContainer>
+
+          </div>
 
         </div>
 
 
-        {/* Pie Chart */}
+        {/* Bar Chart */}
 
-        <div className={`p-6 rounded-3xl border h-100 ${
-          darkMode
-            ? "bg-slate-900 border-slate-800"
-            : "bg-white border-slate-200"
-        }`}>
+        <div
+          className={`rounded-3xl p-8 border ${
+            darkMode
+              ? "bg-slate-900 border-slate-800"
+              : "bg-white border-slate-200"
+          }`}
+        >
 
           <h3 className="text-2xl font-semibold mb-6">
-            Performance Breakdown
+
+            Interview Scores
+
           </h3>
 
-          <ResponsiveContainer
-            width="100%"
-            height="85%"
-          >
 
-            <PieChart>
+          {/* FIXED CONTAINER */}
 
-              <Pie
-                data={pieData}
-                dataKey="value"
-                outerRadius={120}
-                label
+          <div className="w-full h-75 min-h-75">
+
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+
+              <BarChart
+                data={barData}
               >
 
-                {pieData.map(
-                  (entry, index) => (
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                />
 
-                    <Cell
-                      key={index}
-                      fill={
-                        COLORS[index]
-                      }
-                    />
-                  )
-                )}
+                <XAxis
+                  dataKey="name"
+                />
 
-              </Pie>
+                <YAxis />
 
-              <Tooltip />
+                <Tooltip />
 
-            </PieChart>
+                <Bar
+                  dataKey="score"
+                  fill="#3B82F6"
+                  radius={[
+                    8,
+                    8,
+                    0,
+                    0,
+                  ]}
+                />
 
-          </ResponsiveContainer>
+              </BarChart>
+
+            </ResponsiveContainer>
+
+          </div>
 
         </div>
 
