@@ -8,6 +8,7 @@ import InterviewSetup from "./pages/InterviewSetup.jsx";
 import InterviewPage from "./pages/InterviewPage.jsx";
 import ResumeMatcher from "./pages/ResumeMatcher.jsx";
 import ProtectedRoute from "./routes/protectedRoute.jsx";
+import Profile from "./pages/Profile.jsx";
 
 const App = () => {
 
@@ -45,6 +46,15 @@ const App = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route
+  path="/profile"
+  element={
+    <ProtectedRoute>
+      <Profile />
+    </ProtectedRoute>
+  }
+/>
 
       <Route
   path="/resume-analyzer"

@@ -1,23 +1,36 @@
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+} from "react-router-dom";
 
 import useTheme from "../context/useTheme.js";
 
 const Navbar = () => {
 
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const { darkMode, toggleTheme } = useTheme();
+  const {
+    darkMode,
+    toggleTheme,
+  } = useTheme();
 
   const userInfo = JSON.parse(
-    localStorage.getItem("userInfo")
+    localStorage.getItem(
+      "userInfo"
+    )
   );
 
+
+  // Logout
   const logoutHandler = () => {
 
-    localStorage.removeItem("userInfo");
+    localStorage.removeItem(
+      "userInfo"
+    );
 
     navigate("/login");
   };
+
 
   return (
     <nav className={`flex items-center justify-between px-8 py-5 border-b transition-all ${
@@ -28,8 +41,17 @@ const Navbar = () => {
 
       {/* Logo */}
 
-      <h1 className="text-3xl font-bold">
+      <h1
+        onClick={() =>
+          navigate(
+            "/dashboard"
+          )
+        }
+        className="text-3xl font-bold cursor-pointer"
+      >
+
         Interview Ace
+
       </h1>
 
 
@@ -37,19 +59,61 @@ const Navbar = () => {
 
       <div className="flex items-center gap-4">
 
+        {/* Theme Toggle */}
+
         <button
-          onClick={toggleTheme}
+          onClick={
+            toggleTheme
+          }
           className={`px-4 py-2 rounded-xl transition-all ${
             darkMode
               ? "bg-slate-800 hover:bg-slate-700"
               : "bg-slate-200 hover:bg-slate-300"
           }`}
         >
-          {darkMode ? "Light" : "Dark"}
+
+          {darkMode
+            ? "Light"
+            : "Dark"}
+
         </button>
 
 
-        <div className={`px-4 py-2 rounded-xl ${
+        {/* Dashboard */}
+
+        <button
+          onClick={() =>
+            navigate(
+              "/dashboard"
+            )
+          }
+          className="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-xl text-white transition-all"
+        >
+
+          Dashboard
+
+        </button>
+
+
+        {/* Profile */}
+
+        <button
+          onClick={() =>
+            navigate(
+              "/profile"
+            )
+          }
+          className="bg-purple-600 hover:bg-purple-700 px-5 py-2 rounded-xl text-white transition-all"
+        >
+
+          Profile
+
+        </button>
+
+
+        {/* User Name */}
+
+        <div className={`px-4 py-2 rounded-xl font-medium ${
           darkMode
             ? "bg-slate-800"
             : "bg-slate-100"
@@ -60,11 +124,17 @@ const Navbar = () => {
         </div>
 
 
+        {/* Logout */}
+
         <button
-          onClick={logoutHandler}
+          onClick={
+            logoutHandler
+          }
           className="bg-red-600 hover:bg-red-700 px-5 py-2 rounded-xl text-white transition-all"
         >
+
           Logout
+
         </button>
 
       </div>
