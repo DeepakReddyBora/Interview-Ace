@@ -41,15 +41,13 @@ const Profile = () => {
 
   const [formData, setFormData] =
     useState({
-      name:
-        userInfo?.name || "",
-      email:
-        userInfo?.email || "",
+      name: "",
+      email: "",
       password: "",
     });
 
 
-  // Fetch Latest Profile
+  // Fetch Profile
   useEffect(() => {
 
     const fetchProfile =
@@ -60,7 +58,7 @@ const Profile = () => {
           const config = {
             headers: {
               Authorization:
-                `Bearer ${userInfo.token}`,
+                `Bearer ${userInfo?.token}`,
             },
           };
 
@@ -70,19 +68,27 @@ const Profile = () => {
               config
             );
 
+          console.log(
+            "PROFILE RESPONSE:",
+            response.data
+          );
+
           setFormData({
             name:
-              response.data.name ||
+              response.data?.name ||
               "",
             email:
-              response.data.email ||
+              response.data?.email ||
               "",
             password: "",
           });
 
         } catch (error) {
 
-          console.log(error);
+          console.log(
+            "PROFILE ERROR:",
+            error
+          );
         }
       };
 
@@ -94,7 +100,7 @@ const Profile = () => {
   }, [userInfo?.token]);
 
 
-  // Handle Inputs
+  // Handle Input Change
   const handleChange = (e) => {
 
     setFormData({
@@ -105,7 +111,7 @@ const Profile = () => {
   };
 
 
-  // Avatar Upload
+  // Handle Avatar Upload
   const handleAvatarChange = (
     e
   ) => {
@@ -155,7 +161,7 @@ const Profile = () => {
         const config = {
           headers: {
             Authorization:
-              `Bearer ${userInfo.token}`,
+              `Bearer ${userInfo?.token}`,
           },
         };
 
@@ -186,6 +192,8 @@ const Profile = () => {
 
       } catch (error) {
 
+        console.log(error);
+
         setError(
           error.response?.data
             ?.message ||
@@ -206,7 +214,12 @@ const Profile = () => {
         : "bg-slate-100 text-slate-900"
     }`}>
 
+      {/* Navbar */}
+
       <Navbar />
+
+
+      {/* Main Content */}
 
       <div className="max-w-4xl mx-auto p-8">
 
@@ -216,7 +229,7 @@ const Profile = () => {
             : "bg-white border-slate-200"
         }`}>
 
-          {/* Avatar */}
+          {/* Avatar Section */}
 
           <div className="flex flex-col items-center mb-12">
 
@@ -236,7 +249,7 @@ const Profile = () => {
 
                   {formData.name
                     ?.charAt(0)
-                    ?.toUpperCase()}
+                    ?.toUpperCase() || "U"}
 
                 </div>
               )}
@@ -266,7 +279,8 @@ const Profile = () => {
 
             <h1 className="text-5xl font-bold mt-6 mb-2">
 
-              {formData.name}
+              {formData.name ||
+                "User"}
 
             </h1>
 
@@ -279,7 +293,8 @@ const Profile = () => {
                 : "text-slate-600"
             }`}>
 
-              {formData.email}
+              {formData.email ||
+                "No Email"}
 
             </p>
 
@@ -316,6 +331,8 @@ const Profile = () => {
 
             <div className="space-y-6">
 
+              {/* Name Card */}
+
               <div className={`p-6 rounded-2xl ${
                 darkMode
                   ? "bg-slate-800"
@@ -330,12 +347,15 @@ const Profile = () => {
 
                 <h2 className="text-2xl font-semibold">
 
-                  {formData.name}
+                  {formData.name ||
+                    "Not Available"}
 
                 </h2>
 
               </div>
 
+
+              {/* Email Card */}
 
               <div className={`p-6 rounded-2xl ${
                 darkMode
@@ -351,12 +371,15 @@ const Profile = () => {
 
                 <h2 className="text-2xl font-semibold">
 
-                  {formData.email}
+                  {formData.email ||
+                    "Not Available"}
 
                 </h2>
 
               </div>
 
+
+              {/* Edit Button */}
 
               <button
                 onClick={() =>
@@ -382,6 +405,8 @@ const Profile = () => {
               className="space-y-6"
             >
 
+              {/* Name */}
+
               <input
                 type="text"
                 name="name"
@@ -398,6 +423,8 @@ const Profile = () => {
                 }`}
               />
 
+
+              {/* Email */}
 
               <input
                 type="email"
@@ -416,6 +443,8 @@ const Profile = () => {
               />
 
 
+              {/* Password */}
+
               <input
                 type="password"
                 name="password"
@@ -433,6 +462,8 @@ const Profile = () => {
                 }`}
               />
 
+
+              {/* Buttons */}
 
               <div className="flex gap-4">
 
