@@ -88,7 +88,7 @@ const sendOtpEmail = async (
             font-size: 14px;
           "
         >
-          Real-Time Chat Application
+          Interview Ace 
         </p>
       </div>
     `,
