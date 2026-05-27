@@ -21,8 +21,6 @@ import ResumeMatcher from "./pages/ResumeMatcher.jsx";
 
 import Profile from "./pages/Profile.jsx";
 
-import VerifyOtp from "./pages/VerifyOtp.jsx";
-
 import ProtectedRoute from "./routes/protectedRoute.jsx";
 
 const App = () => {
@@ -49,12 +47,6 @@ const App = () => {
         path="/register"
         element={<Register />}
       />
-
-      <Route
-        path="/verify-otp"
-        element={<VerifyOtp />}
-      />
-
 
       {/* ================= DASHBOARD ================= */}
 

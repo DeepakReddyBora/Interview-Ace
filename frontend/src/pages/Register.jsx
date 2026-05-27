@@ -19,39 +19,46 @@ const Register = () => {
     toggleTheme,
   } = useTheme();
 
-  const [formData,
-    setFormData] =
-    useState({
-      name: "",
-      email: "",
-      password: "",
-    });
+  const [
+    formData,
+    setFormData,
+  ] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-  const [success,
-    setSuccess] =
-    useState("");
+  const [
+    success,
+    setSuccess,
+  ] = useState("");
 
-  const [error,
-    setError] =
-    useState("");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-  const [loading,
-    setLoading] =
-    useState(false);
+  const [
+    loading,
+    setLoading,
+  ] = useState(false);
 
 
-  // Handle Inputs
+  // ================= HANDLE INPUT =================
+
   const handleChange = (e) => {
 
     setFormData({
       ...formData,
+
       [e.target.name]:
         e.target.value,
     });
   };
 
 
-  // Handle Register
+  // ================= HANDLE REGISTER =================
+
   const handleSubmit =
     async (e) => {
 
@@ -65,28 +72,19 @@ const Register = () => {
 
         setLoading(true);
 
-        const response =
-          await registerUser(
-            formData
-          );
+        await registerUser(
+          formData
+        );
 
         setSuccess(
-          "OTP sent to your email"
+          "Registration successful! Redirecting to login..."
         );
 
         setTimeout(() => {
 
-          navigate(
-            "/verify-otp",
-            {
-              state: {
-                email:
-                  response.email,
-              },
-            }
-          );
+          navigate("/login");
 
-        }, 1200);
+        }, 1500);
 
       } catch (error) {
 
@@ -110,7 +108,7 @@ const Register = () => {
         : "bg-slate-100 text-slate-900"
     }`}>
 
-      {/* Theme Toggle */}
+      {/* ================= THEME TOGGLE ================= */}
 
       <button
         onClick={toggleTheme}
@@ -128,7 +126,7 @@ const Register = () => {
       </button>
 
 
-      {/* Register Card */}
+      {/* ================= REGISTER CARD ================= */}
 
       <div className={`w-full max-w-md rounded-3xl p-8 border shadow-2xl transition-all ${
         darkMode
@@ -136,20 +134,16 @@ const Register = () => {
           : "bg-white border-slate-200"
       }`}>
 
-        {/* Header */}
+        {/* ================= HEADER ================= */}
 
         <div className="text-center mb-8">
 
           <div className="text-6xl mb-4">
-
             🚀
-
           </div>
 
           <h1 className="text-4xl font-bold mb-2">
-
             Create Account
-
           </h1>
 
           <p className={`${
@@ -165,7 +159,7 @@ const Register = () => {
         </div>
 
 
-        {/* Success Message */}
+        {/* ================= SUCCESS ================= */}
 
         {success && (
 
@@ -177,7 +171,7 @@ const Register = () => {
         )}
 
 
-        {/* Error Message */}
+        {/* ================= ERROR ================= */}
 
         {error && (
 
@@ -189,7 +183,7 @@ const Register = () => {
         )}
 
 
-        {/* Form */}
+        {/* ================= FORM ================= */}
 
         <form
           onSubmit={
@@ -198,7 +192,7 @@ const Register = () => {
           className="space-y-5"
         >
 
-          {/* Name */}
+          {/* NAME */}
 
           <input
             type="text"
@@ -219,7 +213,7 @@ const Register = () => {
           />
 
 
-          {/* Email */}
+          {/* EMAIL */}
 
           <input
             type="email"
@@ -240,7 +234,7 @@ const Register = () => {
           />
 
 
-          {/* Password */}
+          {/* PASSWORD */}
 
           <input
             type="password"
@@ -261,7 +255,7 @@ const Register = () => {
           />
 
 
-          {/* Register Button */}
+          {/* REGISTER BUTTON */}
 
           <button
             type="submit"
@@ -270,7 +264,7 @@ const Register = () => {
           >
 
             {loading
-              ? "Sending OTP..."
+              ? "Creating Account..."
               : "Register"}
 
           </button>
@@ -278,7 +272,7 @@ const Register = () => {
         </form>
 
 
-        {/* Footer */}
+        {/* ================= FOOTER ================= */}
 
         <p className={`text-center mt-6 ${
           darkMode

@@ -5,8 +5,6 @@ import {
   loginUser,
   getUserProfile,
   updateUserProfile,
-  verifyOtp,
-  resendOtp,
 } from "../controllers/authController.js";
 
 import protect from "../middleware/authMiddleware.js";
@@ -21,23 +19,6 @@ router.post(
   "/register",
   registerUser
 );
-
-
-// ================= VERIFY OTP =================
-
-router.post(
-  "/verify-otp",
-  verifyOtp
-);
-
-
-// ================= RESEND OTP =================
-
-router.post(
-  "/resend-otp",
-  resendOtp
-);
-
 
 // ================= LOGIN =================
 

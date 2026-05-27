@@ -20,21 +20,6 @@ const userSchema =
         type: String,
         required: true,
       },
-
-      // ================= OTP =================
-
-      isVerified: {
-        type: Boolean,
-        default: false,
-      },
-
-      otp: {
-        type: String,
-      },
-
-      otpExpiry: {
-        type: Date,
-      },
     },
 
     {
