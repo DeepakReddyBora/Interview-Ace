@@ -207,6 +207,7 @@ export const resendOtp =
       await user.save();
 
       // Send OTP
+      const sendEmail =
       await sendOtpEmail(
         email,
         "Interview Ace Otp Verification",

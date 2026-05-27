@@ -1,13 +1,12 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
 import nodemailer from "nodemailer";
 
 const transporter =
   nodemailer.createTransport({
-
-    host: "smtp.gmail.com",
-
-    port: 587,
-
-    secure: false,
+    service: "gmail",
 
     auth: {
       user:
@@ -15,10 +14,6 @@ const transporter =
 
       pass:
         process.env.EMAIL_PASS,
-    },
-
-    tls: {
-      rejectUnauthorized: false,
     },
   });
 
@@ -34,97 +29,99 @@ const sendOtpEmail =
 
     try {
 
-      const info =
-        await transporter.sendMail({
+      await transporter.sendMail({
 
-          from:
-            process.env.EMAIL_USER,
+        from:
+          process.env.EMAIL_USER,
 
-          to,
+        to,
 
-          subject,
+        subject,
 
-          html: `
+        html: `
+          <div
+            style="
+              font-family: Arial, sans-serif;
+              max-width: 500px;
+              margin: auto;
+              padding: 20px;
+              border: 1px solid #e5e5e5;
+              border-radius: 10px;
+            "
+          >
+
+            <h2 style="
+              text-align: center;
+            ">
+              Verify Your Account
+            </h2>
+
+            <p>
+              Thank you for signing up.
+            </p>
+
+            <p>
+              Use the OTP below to verify your account:
+            </p>
+
             <div
               style="
-                font-family: Arial, sans-serif;
-                max-width: 500px;
-                margin: auto;
-                padding: 20px;
-                border: 1px solid #e5e5e5;
-                border-radius: 10px;
+                text-align: center;
+                margin: 30px 0;
               "
             >
 
-              <h2 style="
-                text-align: center;
-              ">
-                Verify Your Account
-              </h2>
-
-              <p>
-                Thank you for signing up.
-              </p>
-
-              <p>
-                Use the OTP below:
-              </p>
-
-              <div
+              <span
                 style="
-                  text-align: center;
-                  margin: 30px 0;
+                  font-size: 32px;
+                  font-weight: bold;
+                  letter-spacing: 8px;
+                  background: #f3f4f6;
+                  padding: 15px 25px;
+                  border-radius: 8px;
+                  display: inline-block;
                 "
               >
 
-                <span
-                  style="
-                    font-size: 32px;
-                    font-weight: bold;
-                    letter-spacing: 8px;
-                    background: #f3f4f6;
-                    padding: 15px 25px;
-                    border-radius: 8px;
-                    display: inline-block;
-                  "
-                >
+                ${otp}
 
-                  ${otp}
-
-                </span>
-
-              </div>
-
-              <p>
-                OTP expires in
-                <strong>
-                  5 minutes
-                </strong>.
-              </p>
-
-              <hr />
-
-              <p
-                style="
-                  text-align: center;
-                  color: gray;
-                  font-size: 14px;
-                "
-              >
-
-                Interview Ace
-
-              </p>
+              </span>
 
             </div>
-          `,
-        });
+
+            <p>
+              This OTP will expire in
+              <strong>
+                5 minutes
+              </strong>.
+            </p>
+
+            <p>
+              If you did not request this,
+              please ignore this email.
+            </p>
+
+            <hr />
+
+            <p
+              style="
+                text-align: center;
+                color: gray;
+                font-size: 14px;
+              "
+            >
+
+              Interview Ace
+
+            </p>
+
+          </div>
+        `,
+      });
 
       console.log(
-        "EMAIL SENT:"
+        "OTP EMAIL SENT"
       );
-
-      console.log(info.response);
 
       return true;
 
