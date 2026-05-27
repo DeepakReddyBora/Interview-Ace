@@ -66,6 +66,7 @@ export const registerUser =
         });
 
       // Send OTP Email
+      const emailSent =
       await sendOtpEmail(
         email,
         "Interview Ace Otp Verification",
