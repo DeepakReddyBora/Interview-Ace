@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = async (
+const sendOtpEmail = async (
   to,
   subject,
   otp
