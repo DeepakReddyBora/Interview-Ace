@@ -21,7 +21,7 @@ const userSchema =
         required: true,
       },
 
-      // ================= OTP VERIFICATION =================
+      // ================= OTP =================
 
       isVerified: {
         type: Boolean,
@@ -62,37 +62,27 @@ userSchema.methods.matchPassword =
 userSchema.pre(
   "save",
 
-  async function (next) {
+  async function () {
 
-    // Only hash if modified
     if (
       !this.isModified(
         "password"
       )
     ) {
 
-      return next();
+      return;
     }
 
-    try {
+    const salt =
+      await bcrypt.genSalt(
+        10
+      );
 
-      const salt =
-        await bcrypt.genSalt(
-          10
-        );
-
-      this.password =
-        await bcrypt.hash(
-          this.password,
-          salt
-        );
-
-      next();
-
-    } catch (error) {
-
-      next(error);
-    }
+    this.password =
+      await bcrypt.hash(
+        this.password,
+        salt
+      );
   }
 );
 
