@@ -18,13 +18,13 @@ dns.setDefaultResultOrder(
 const transporter =
   nodemailer.createTransport({
 
-    host: "smtp.gmail.com",
+    host: "smtp.googlemail.com",
 
     port: 587,
 
     secure: false,
 
-    requireTLS: true,
+    pool: false,
 
     auth: {
       user:
@@ -34,11 +34,18 @@ const transporter =
         process.env.EMAIL_PASS,
     },
 
-    connectionTimeout: 10000,
+    family: 4,
 
-    greetingTimeout: 10000,
+    tls: {
+      ciphers: "SSLv3",
+      rejectUnauthorized: false,
+    },
 
-    socketTimeout: 10000,
+    connectionTimeout: 30000,
+
+    greetingTimeout: 30000,
+
+    socketTimeout: 30000,
   });
 
 
