@@ -68,6 +68,7 @@ export const registerUser =
       // Send OTP Email
       await sendOtpEmail(
         email,
+        "Interview Ace Otp Verification",
         otp
       );
 
@@ -207,6 +208,7 @@ export const resendOtp =
       // Send OTP
       await sendOtpEmail(
         email,
+        "Interview Ace Otp Verification",
         otp
       );
 
