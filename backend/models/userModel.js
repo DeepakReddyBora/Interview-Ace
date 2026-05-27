@@ -19,6 +19,19 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    otp: {
+      type: String,
+    },
+
+    otpExpiry: {
+      type: Date,
+    },
   },
 
   {
@@ -46,15 +59,19 @@ userSchema.pre(
 
     if (!this.isModified("password")) {
 
-      next();
+      return next();
     }
 
-    const salt = await bcrypt.genSalt(10);
+    const salt =
+      await bcrypt.genSalt(10);
 
-    this.password = await bcrypt.hash(
-      this.password,
-      salt
-    );
+    this.password =
+      await bcrypt.hash(
+        this.password,
+        salt
+      );
+
+    next();
   }
 );
 

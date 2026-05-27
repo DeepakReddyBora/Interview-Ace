@@ -1,27 +1,64 @@
 import axios from "axios";
 
-const API_URL = "https://interview-ace-backend-ed6s.onrender.com/api/auth";
+const API_URL =
+  "https://interview-ace-backend-ed6s.onrender.com/api/auth";
 
 
-// Register
-export const registerUser = async (userData) => {
+// ================= REGISTER =================
 
-  const response = await axios.post(
-    `${API_URL}/register`,
-    userData
-  );
+export const registerUser =
+  async (userData) => {
 
-  return response.data;
-};
+    const response =
+      await axios.post(
+        `${API_URL}/register`,
+        userData
+      );
+
+    return response.data;
+  };
 
 
-// Login
-export const loginUser = async (userData) => {
+// ================= VERIFY OTP =================
 
-  const response = await axios.post(
-    `${API_URL}/login`,
-    userData
-  );
+export const verifyOtp =
+  async (otpData) => {
 
-  return response.data;
-};
+    const response =
+      await axios.post(
+        `${API_URL}/verify-otp`,
+        otpData
+      );
+
+    return response.data;
+  };
+
+
+// ================= RESEND OTP =================
+
+export const resendOtp =
+  async (emailData) => {
+
+    const response =
+      await axios.post(
+        `${API_URL}/resend-otp`,
+        emailData
+      );
+
+    return response.data;
+  };
+
+
+// ================= LOGIN =================
+
+export const loginUser =
+  async (userData) => {
+
+    const response =
+      await axios.post(
+        `${API_URL}/login`,
+        userData
+      );
+
+    return response.data;
+  };

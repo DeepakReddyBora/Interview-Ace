@@ -5,14 +5,17 @@ import {
   loginUser,
   getUserProfile,
   updateUserProfile,
+  verifyOtp,
+  resendOtp,
 } from "../controllers/authController.js";
 
 import protect from "../middleware/authMiddleware.js";
 
-const router = express.Router();
+const router =
+  express.Router();
 
 
-// Register
+// ================= REGISTER =================
 
 router.post(
   "/register",
@@ -20,7 +23,23 @@ router.post(
 );
 
 
-// Login
+// ================= VERIFY OTP =================
+
+router.post(
+  "/verify-otp",
+  verifyOtp
+);
+
+
+// ================= RESEND OTP =================
+
+router.post(
+  "/resend-otp",
+  resendOtp
+);
+
+
+// ================= LOGIN =================
 
 router.post(
   "/login",
@@ -28,7 +47,7 @@ router.post(
 );
 
 
-// Get Profile
+// ================= GET PROFILE =================
 
 router.get(
   "/profile",
@@ -37,7 +56,7 @@ router.get(
 );
 
 
-// Update Profile
+// ================= UPDATE PROFILE =================
 
 router.put(
   "/profile",
