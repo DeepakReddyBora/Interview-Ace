@@ -71,6 +71,14 @@ export const registerUser =
         otp
       );
 
+      if (!emailSent) {
+
+        return res.status(500).json({
+          message:
+            "Failed to send OTP email",
+        });
+      }
+
       res.status(201).json({
         message:
           "OTP sent to your email",
