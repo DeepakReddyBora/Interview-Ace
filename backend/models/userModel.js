@@ -2,47 +2,53 @@ import mongoose from "mongoose";
 
 import bcrypt from "bcryptjs";
 
-const userSchema = mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
+const userSchema =
+  mongoose.Schema(
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+      },
+
+      password: {
+        type: String,
+        required: true,
+      },
+
+      // ================= OTP VERIFICATION =================
+
+      isVerified: {
+        type: Boolean,
+        default: false,
+      },
+
+      otp: {
+        type: String,
+      },
+
+      otpExpiry: {
+        type: Date,
+      },
     },
 
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-
-    otp: {
-      type: String,
-    },
-
-    otpExpiry: {
-      type: Date,
-    },
-  },
-
-  {
-    timestamps: true,
-  }
-);
+    {
+      timestamps: true,
+    }
+  );
 
 
-// Match Password
+// ================= MATCH PASSWORD =================
+
 userSchema.methods.matchPassword =
-  async function (enteredPassword) {
+  async function (
+    enteredPassword
+  ) {
 
     return await bcrypt.compare(
       enteredPassword,
@@ -51,33 +57,49 @@ userSchema.methods.matchPassword =
   };
 
 
-// Hash Password
+// ================= HASH PASSWORD =================
+
 userSchema.pre(
   "save",
 
   async function (next) {
 
-    if (!this.isModified("password")) {
+    // Only hash if modified
+    if (
+      !this.isModified(
+        "password"
+      )
+    ) {
 
       return next();
     }
 
-    const salt =
-      await bcrypt.genSalt(10);
+    try {
 
-    this.password =
-      await bcrypt.hash(
-        this.password,
-        salt
-      );
+      const salt =
+        await bcrypt.genSalt(
+          10
+        );
 
-    next();
+      this.password =
+        await bcrypt.hash(
+          this.password,
+          salt
+        );
+
+      next();
+
+    } catch (error) {
+
+      next(error);
+    }
   }
 );
 
-const User = mongoose.model(
-  "User",
-  userSchema
-);
+const User =
+  mongoose.model(
+    "User",
+    userSchema
+  );
 
 export default User;
