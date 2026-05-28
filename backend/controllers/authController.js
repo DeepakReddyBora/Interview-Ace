@@ -5,6 +5,8 @@ import generateToken from "../utils/generateToken.js";
 
 // ================= REGISTER =================
 
+// ================= REGISTER =================
+
 export const registerUser =
   async (req, res) => {
 
@@ -48,6 +50,17 @@ export const registerUser =
           email,
           password,
         });
+
+      // SEND RESPONSE
+      res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        token:
+          generateToken(
+            user._id
+          ),
+      });
 
     } catch (error) {
 
