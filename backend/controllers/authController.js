@@ -94,18 +94,7 @@ export const loginUser =
           password
         ))
       ) {
-
-        // Check Verification
-        if (
-          !user.isVerified
-        ) {
-
-          return res.status(401).json({
-            message:
-              "Please verify your email first",
-          });
-        }
-
+        
         res.status(200).json({
           _id: user._id,
           name: user.name,
